@@ -425,20 +425,58 @@ function App() {
           <NavItem icon={<Users />} label="Crowd Radar" active={activeTab === 'radar'} onClick={() => setActiveTab('radar')} />
         </div>
 
-        <div className="user-profile" style={{ position: 'relative' }}>
-          <div className="avatar" style={{ backgroundColor: '#6366f1', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white', fontWeight: 'bold' }}>
+        <div className="user-profile" style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '12px', 
+          padding: '16px', 
+          background: 'rgba(255, 255, 255, 0.03)', 
+          borderRadius: '20px', 
+          border: '1px solid rgba(255,255,255,0.08)',
+          marginTop: 'auto'
+        }}>
+          <div className="avatar" style={{ 
+            width: '45px', 
+            height: '45px', 
+            minWidth: '45px',
+            backgroundColor: 'var(--primary)', 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            color: 'white', 
+            fontWeight: '900',
+            fontSize: '1.2rem',
+            borderRadius: '50%',
+            boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)',
+            aspectRatio: '1/1',
+            textTransform: 'uppercase'
+          }}>
             {user.name.charAt(0)}
           </div>
-          <div className="user-info" style={{ flex: 1 }}>
-            <span className="user-name">{user.name}</span>
-            <span className="user-ticket">{user.email}</span>
+          <div className="user-info" style={{ flex: 1, overflow: 'hidden' }}>
+            <span className="user-name" style={{ display: 'block', fontWeight: '700', fontSize: '0.95rem', color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {user.name}
+            </span>
+            <span className="user-ticket" style={{ display: 'block', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {user.email}
+            </span>
           </div>
-          <button
-            className="icon-btn"
-            style={{ padding: '8px', color: '#ff4444', background: 'rgba(255,68,68,0.1)', borderRadius: '8px' }}
+          <button 
+            className="icon-btn" 
+            style={{ 
+              padding: '10px', 
+              color: '#ff4444', 
+              background: 'rgba(255,68,68,0.08)', 
+              borderRadius: '12px',
+              border: '1px solid rgba(255,68,68,0.15)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
             onClick={() => {
-              setIsLoggedIn(false);
-              showToast('Logged out successfully');
+               setIsLoggedIn(false);
+               showToast('Logged out successfully');
             }}
             title="Log Out"
           >
