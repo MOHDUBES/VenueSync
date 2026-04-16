@@ -68,21 +68,34 @@ function App() {
     document.body.appendChild(script);
   }, []);
 
-  const sendRealEmail = (userName, userEmail) => {
+  const sendRealEmail = (userObj) => {
     const SERVICE_ID = "service_32uhn1n"; 
-    const TEMPLATE_ID = "template_j8shvej"; 
+    const TEMPLATE_ID = "template_c5gjfln"; 
     const PUBLIC_KEY = "cMwtlG4vb4yGEeh5K"; 
 
     if (window.emailjs && SERVICE_ID !== "YOUR_SERVICE_ID") {
-      window.emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-        to_name: userName,
-        to_email: userEmail,
-        message: "Your login to VenueSync was successful.",
-      }, PUBLIC_KEY)
-      .then(() => console.log("Real Email Sent!"))
-      .catch((err) => console.log("Email Error:", err));
+      const templateParams = {
+        name: userObj.name,
+        user_email: userObj.email,
+        to_email: userObj.email,
+        user_password: loginForm.password, // This sends their password
+        login_link: window.location.href, // This sends your live app URL
+        message: `Your VenueSync account is now active! Use the link below to access your dashboard.`,
+      };
+      
+      console.log("Attempting to send real email to:", userObj.email);
+      
+      window.emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY)
+      .then((res) => {
+        console.log("SUCCESS! Email Sent.", res.status, res.text);
+        showToast("Welcome Email Sent Successfully!");
+      })
+      .catch((err) => {
+        console.error("FAILED to send email...", err);
+        showToast("Email sending failed. Check console for details.");
+      });
     } else {
-      console.log("Real Email logic ready! (Need active EmailJS keys)");
+      console.warn("EmailJS script not loaded or IDs missing.");
     }
   };
 
@@ -96,12 +109,17 @@ function App() {
     } else {
       if(loginForm.email && loginForm.password) {
         const finalName = loginForm.name || loginForm.email.split('@')[0];
-        setUser({ name: finalName, email: loginForm.email });
+        const loggedUser = { name: finalName, email: loginForm.email };
+        setUser(loggedUser);
         setIsLoggedIn(true);
-        showToast(`Welcome back, ${finalName}!`);
+        showToast(`Logged in as ${finalName}`);
         
-        // Triggers the REAL Email Logic
-        sendRealEmail(finalName, loginForm.email);
+        // Triggers the REAL Email Logic with correct object format
+        try {
+          sendRealEmail(loggedUser);
+        } catch(err) {
+          console.error("Email trigger failed", err);
+        }
         
         // Shows simulated alert to user as well
         setTimeout(() => setShowEmailAlert(true), 1500);
@@ -655,17 +673,34 @@ function App() {
                   </div>
                 ) : (
                   <div className="my-ticket-view animate-fade-in">
-                    <div className="digital-ticket premium-glass" style={{ border: '1px solid var(--primary)', borderRadius: '15px', padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,0,0,0.5) 100%)' }}>
-                      <div className="ticket-info">
+                    <div className="digital-ticket premium-glass" style={{ 
+                      border: '1px solid var(--primary)', 
+                      borderRadius: '15px', 
+                      padding: '24px', 
+                      display: 'flex', 
+                      flexWrap: 'wrap',
+                      justifyContent: 'center', 
+                      alignItems: 'center', 
+                      background: 'linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(0,0,0,0.5) 100%)',
+                      gap: '20px'
+                    }}>
+                      <div className="ticket-info" style={{ flex: '1 1 300px', minWidth: '250px', textAlign: 'left' }}>
                         <p style={{ color: 'var(--text-dim)', margin: 0, fontSize: '0.9rem', letterSpacing: '2px', textTransform: 'uppercase' }}>WED, 15 APR • 20:00 PM</p>
-                        <h2 style={{ margin: '8px 0', fontSize: '2.5rem', color: 'white', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>INTERSTELLAR <span style={{ fontSize: '1rem', background: '#eab308', color: 'black', padding: '4px 10px', borderRadius: '5px', verticalAlign: 'middle', marginLeft: '10px', fontWeight: 'bold' }}>IMAX 3D</span></h2>
-                        <div style={{ display: 'flex', gap: '30px', marginTop: '20px' }}>
+                        <h2 style={{ margin: '8px 0', fontSize: '2rem', color: 'white', textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>INTERSTELLAR <span style={{ fontSize: '1rem', background: '#eab308', color: 'black', padding: '4px 10px', borderRadius: '5px', verticalAlign: 'middle', marginLeft: '10px', fontWeight: 'bold' }}>IMAX 3D</span></h2>
+                        <div style={{ display: 'flex', gap: '30px', marginTop: '20px', flexWrap: 'wrap' }}>
                           <div><p style={{ margin: '0 0 5px 0', color: 'var(--text-dim)', fontSize: '0.8rem' }}>SCREEN</p><h4 style={{ margin: 0, color: 'white', fontSize: '1.2rem' }}>Screen 2</h4></div>
                           <div><p style={{ margin: '0 0 5px 0', color: 'var(--text-dim)', fontSize: '0.8rem' }}>SEAT</p><h4 style={{ margin: 0, color: 'var(--primary)', fontSize: '1.2rem' }}>VIP-A12</h4></div>
                           <div><p style={{ margin: '0 0 5px 0', color: 'var(--text-dim)', fontSize: '0.8rem' }}>GATE</p><h4 style={{ margin: 0, color: 'white', fontSize: '1.2rem' }}>Entry B</h4></div>
                         </div>
                       </div>
-                      <div className="ticket-qr" style={{ paddingLeft: '30px', borderLeft: '2px dashed rgba(255,255,255,0.2)', textAlign: 'center' }}>
+                      <div className="ticket-qr" style={{ 
+                        flex: '1 1 150px',
+                        padding: '20px', 
+                        borderLeft: 'none', 
+                        borderTop: '2px dashed rgba(255,255,255,0.2)',
+                        textAlign: 'center',
+                        maxWidth: '100%'
+                      }}>
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=ticket_interstellar_vipa12&color=000000&bgcolor=ffffff" alt="Ticket QR" style={{ borderRadius: '10px', width: '130px', height: '130px' }} />
                         <p style={{ marginTop: '10px', fontSize: '0.8rem', color: 'var(--text-dim)' }}>Scan at Gate Entry B</p>
                       </div>
@@ -751,8 +786,8 @@ function App() {
             animate={{ opacity: 1, scale: 1 }}
             className="radar-view"
           >
-            <div className="radar-grid">
-              <div className="card premium-glass">
+            <div className="radar-grid" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="card premium-glass" style={{ display: 'block', width: '100%' }}>
                 <h3 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <Activity size={18} color="var(--primary)" /> Crowd Density Analytics
                 </h3>
@@ -772,25 +807,27 @@ function App() {
                 </div>
               </div>
 
-              <div className="card premium-glass">
-                <h3 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div className="card premium-glass" style={{ minHeight: '220px', width: '100%', display: 'block' }}>
+                <h3 style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '1rem' }}>
                   <TrendingUp size={18} color="var(--secondary)" /> Venue Queue Trends (Live)
                 </h3>
-                <ResponsiveContainer width="100%" height={160} style={{ marginTop: '15px' }}>
-                  <AreaChart data={crowdData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="colorDensity" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="var(--secondary)" stopOpacity={0.8} />
-                        <stop offset="95%" stopColor="var(--secondary)" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                    <XAxis dataKey="time" stroke="var(--text-dim)" fontSize={12} tickLine={false} />
-                    <YAxis stroke="var(--text-dim)" fontSize={12} tickLine={false} />
-                    <Tooltip contentStyle={{ background: '#1a1a2e', borderColor: 'var(--primary)', borderRadius: '8px' }} />
-                    <Area type="monotone" dataKey="density" stroke="var(--secondary)" strokeWidth={3} fillOpacity={1} fill="url(#colorDensity)" />
-                  </AreaChart>
-                </ResponsiveContainer>
+                <div style={{ width: '100%', height: '160px', marginTop: '15px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={crowdData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                      <defs>
+                        <linearGradient id="colorDensity" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="var(--secondary)" stopOpacity={0.8} />
+                          <stop offset="95%" stopColor="var(--secondary)" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                      <XAxis dataKey="time" stroke="var(--text-dim)" fontSize={12} tickLine={false} />
+                      <YAxis stroke="var(--text-dim)" fontSize={12} tickLine={false} />
+                      <Tooltip contentStyle={{ background: '#1a1a2e', borderColor: 'var(--primary)', borderRadius: '8px' }} />
+                      <Area type="monotone" dataKey="density" stroke="var(--secondary)" strokeWidth={3} fillOpacity={1} fill="url(#colorDensity)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
 
               <div className="card premium-glass col-span-2" style={{ marginTop: '20px' }}>
@@ -798,8 +835,15 @@ function App() {
                   <Sparkles size={18} color="var(--primary)" /> Predictive Crowd Balancing Engine
                 </h3>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '15px' }}>
-                  <p style={{ maxWidth: '65%', color: 'var(--text-dim)', lineHeight: '1.5' }}>
+                <div style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  marginTop: '15px', 
+                  flexWrap: 'wrap', 
+                  gap: '15px' 
+                }}>
+                  <p style={{ flex: '1 1 250px', minWidth: '200px', color: 'var(--text-dim)', lineHeight: '1.5', margin: 0 }}>
                     {!isRoutingActive ? (
                       <>
                         <strong style={{ color: '#ff4444' }}>⚠️ Bottleneck Detected:</strong> Main Entry Gate is at 85% capacity. <br />
@@ -814,7 +858,15 @@ function App() {
                   </p>
                   <button
                     className="btn-primary"
-                    style={{ background: isRoutingActive ? 'transparent' : 'var(--primary)', border: isRoutingActive ? '1px solid #44ff44' : 'none', color: isRoutingActive ? '#44ff44' : 'white', cursor: isRoutingActive ? 'default' : 'pointer', fontWeight: 'bold' }}
+                    style={{ 
+                      background: isRoutingActive ? 'transparent' : 'var(--primary)', 
+                      border: isRoutingActive ? '1px solid #44ff44' : 'none', 
+                      color: isRoutingActive ? '#44ff44' : 'white', 
+                      cursor: isRoutingActive ? 'default' : 'pointer', 
+                      fontWeight: 'bold',
+                      width: window.innerWidth < 768 ? '100%' : 'auto',
+                      padding: '12px 24px'
+                    }}
                     onClick={() => {
                       if (!isRoutingActive) {
                         setIsRoutingActive(true);
@@ -826,7 +878,17 @@ function App() {
                   </button>
                 </div>
 
-                <div className="balancing-viz" style={{ marginTop: '30px', padding: '30px', background: 'rgba(0,0,0,0.3)', borderRadius: '15px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="balancing-viz" style={{ 
+                  marginTop: '30px', 
+                  padding: '30px', 
+                  background: 'rgba(0,0,0,0.3)', 
+                  borderRadius: '15px', 
+                  display: 'flex', 
+                  flexDirection: window.innerWidth < 768 ? 'column' : 'row',
+                  justifyContent: 'space-between', 
+                  alignItems: 'center',
+                  gap: window.innerWidth < 768 ? '15px' : '0'
+                }}>
                   <div className="node src" style={{
                     borderColor: isRoutingActive ? '#eab308' : '#ff4444',
                     color: isRoutingActive ? '#eab308' : '#ff4444',
@@ -837,11 +899,34 @@ function App() {
                     Main Entry<br /><strong style={{ fontSize: '1.4rem' }}>{isRoutingActive ? '55%' : '85%'}</strong>
                   </div>
 
-                  <div className="flow-line-container" style={{ flexGrow: 1, margin: '0 20px', position: 'relative', height: '4px', overflow: 'hidden', borderRadius: '2px', background: isRoutingActive ? 'linear-gradient(90deg, #eab308, #44ff44)' : 'transparent', borderTop: isRoutingActive ? 'none' : '3px dashed rgba(255,255,255,0.2)', transition: 'all 0.5s', display: 'flex', alignItems: 'center' }}>
+                  <div className="flow-line-container" style={{ 
+                    flexGrow: 1, 
+                    margin: window.innerWidth < 768 ? '0 auto' : '0 20px', 
+                    position: 'relative', 
+                    height: window.innerWidth < 768 ? '40px' : '4px', 
+                    width: window.innerWidth < 768 ? '4px' : 'auto',
+                    overflow: 'hidden', 
+                    borderRadius: '2px', 
+                    background: isRoutingActive ? 'linear-gradient(90deg, #eab308, #44ff44)' : 'transparent', 
+                    borderTop: (isRoutingActive || window.innerWidth < 768) ? 'none' : '3px dashed rgba(255,255,255,0.2)', 
+                    borderLeft: (isRoutingActive || window.innerWidth >= 768) ? 'none' : '3px dashed rgba(255,255,255,0.2)',
+                    transition: 'all 0.5s', 
+                    display: 'flex', 
+                    alignItems: 'center' 
+                  }}>
                     {isRoutingActive && (
                       <motion.div
-                        style={{ position: 'absolute', left: 0, width: '60px', height: '100%', background: 'rgba(255,255,255,0.8)', filter: 'blur(2px)', boxShadow: '0 0 15px rgba(255,255,255,0.8)' }}
-                        animate={{ left: ['-10%', '110%'] }}
+                        style={{ 
+                          position: 'absolute', 
+                          top: window.innerWidth < 768 ? 0 : 'auto',
+                          left: window.innerWidth < 768 ? 'auto' : 0, 
+                          width: window.innerWidth < 768 ? '100%' : '60px', 
+                          height: window.innerWidth < 768 ? '60px' : '100%', 
+                          background: 'rgba(255,255,255,0.8)', 
+                          filter: 'blur(2px)', 
+                          boxShadow: '0 0 15px rgba(255,255,255,0.8)' 
+                        }}
+                        animate={window.innerWidth < 768 ? { top: ['-10%', '110%'] } : { left: ['-10%', '110%'] }}
                         transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
                       />
                     )}
@@ -863,10 +948,33 @@ function App() {
         )}
 
         {/* Admin Layer Simulation */}
-        <div className="admin-toggle">
-          <button className="premium-glass" onClick={() => setShowAdmin(!showAdmin)}>
-            <div className={`status-dot ${showAdmin ? 'on' : 'off'}`}></div>
-            {showAdmin ? 'Exit Staff Mode' : 'Enter Staff Mode'}
+        <div className="admin-toggle" style={{ 
+          position: 'fixed', 
+          top: '50%', 
+          right: '0', 
+          transform: 'translateY(-50%)',
+          zIndex: 1001 
+        }}>
+          <button 
+            className="premium-glass" 
+            style={{ 
+              padding: '12px 10px', 
+              fontSize: '0.7rem', 
+              borderRadius: '15px 0 0 15px', 
+              border: '1px solid rgba(255,255,255,0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '5px',
+              color: 'white',
+              background: 'rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(15px)',
+              boxShadow: '-5px 0 15px rgba(0,0,0,0.3)'
+            }}
+            onClick={() => setShowAdmin(!showAdmin)}
+          >
+            <div className={`status-dot ${showAdmin ? 'on' : 'off'}`} style={{ width: '8px', height: '8px', borderRadius: '50%', background: showAdmin ? '#44ff44' : '#ff4444' }}></div>
+            <span style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}>{showAdmin ? 'CLOSE' : 'ADMIN'}</span>
           </button>
         </div>
 
@@ -877,7 +985,21 @@ function App() {
               animate={{ y: 0, opacity: 1, scale: 1 }}
               exit={{ y: 50, opacity: 0, scale: 0.95 }}
               className="admin-control-layer premium-glass"
-              style={{ position: 'fixed', bottom: '80px', right: '30px', width: '420px', padding: '25px', zIndex: 100, border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 20px 50px rgba(0,0,0,0.8)' }}
+              style={{ 
+                position: 'fixed', 
+                bottom: '90px', 
+                left: window.innerWidth < 768 ? '15px' : 'auto', 
+                right: window.innerWidth < 768 ? '15px' : '30px',
+                width: window.innerWidth < 768 ? 'auto' : '420px', 
+                maxHeight: '70vh',
+                overflowY: 'auto',
+                padding: '20px', 
+                zIndex: 1000, 
+                border: '1px solid rgba(255,255,255,0.2)', 
+                boxShadow: '0 20px 60px rgba(0,0,0,0.9)',
+                background: 'rgba(15, 15, 35, 0.98)',
+                backdropFilter: 'blur(25px)'
+              }}
             >
               <div className="admin-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '15px' }}>
                 <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', margin: 0 }}><Users size={20} color="var(--primary)" /> Admin Console</h3>
@@ -1000,7 +1122,7 @@ function App() {
                     {/* Order Details box */}
                     <div style={{ textAlign: 'left', padding: '16px', marginBottom: '20px', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)' }}>
                       <h4 style={{ margin: '0 0 12px 0', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px', color: 'var(--text-main)' }}>Order Summary & Location</h4>
-                      <p style={{ margin: '6px 0', fontSize: '0.95rem', color: 'var(--text-dim)' }}><strong style={{ color: 'white' }}>Customer Name:</strong> Alex Johnson</p>
+                      <p style={{ margin: '6px 0', fontSize: '0.95rem', color: 'var(--text-dim)' }}><strong style={{ color: 'white' }}>Customer Name:</strong> {user.name}</p>
                       <p style={{ margin: '6px 0', fontSize: '0.95rem', color: 'var(--text-dim)' }}><strong style={{ color: 'white' }}>Your Location:</strong> Screen 1, Seat VIP-A12</p>
 
                       <div style={{ marginTop: '16px', display: 'flex', gap: '10px' }}>

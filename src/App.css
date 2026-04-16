@@ -1353,81 +1353,74 @@
   }
 
   .main-content {
-    padding: 10px;
-    padding-bottom: 80px;
-    width: 100%;
-    overflow-x: hidden;
+    padding: 15px;
+    padding-bottom: 90px; /* Space for bottom nav */
   }
 
   .dashboard-grid {
-    grid-template-columns: 1fr !important;
-    display: flex !important;
-    flex-direction: column !important;
+    grid-template-columns: 1fr;
     gap: 15px;
   }
 
-  /* Force stack analytic cards */
+  /* Keep metrics side by side */
   .metrics-row {
-    flex-direction: column !important;
-    gap: 10px !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    gap: 15px !important;
   }
 
   .metric-card {
-    width: 100% !important;
-    margin: 0 !important;
-  }
-
-  .live-map-card, .chart-card, .predictive-card, .ticket-card {
-    width: 100% !important;
-    grid-column: span 1 !important;
-    min-height: auto !important;
-  }
-
-  /* Fix Ticket for mobile */
-  .ticket-main {
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    gap: 20px !important;
-  }
-
-  .ticket-info {
-    border-right: none !important;
-    padding-right: 0 !important;
-    width: 100% !important;
-  }
-
-  .ticket-qr-section {
-    padding-left: 0 !important;
-    width: 100% !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* Fix Routing Engine Circles */
-  .routing-viz {
-    flex-direction: column !important;
-    gap: 30px !important;
-  }
-
-  .node-circle {
-    width: 100px !important;
-    height: 100px !important;
-  }
-
-  /* Fix Map on mobile */
-  .venue-layout {
-    transform: scale(0.8);
-    margin: 0 auto;
+    min-width: 140px !important;
+    flex-shrink: 0 !important;
   }
 
   .search-bar {
-    width: 100%;
+    max-width: 100%;
   }
 
-  .logo-text {
-    font-size: 1.2rem;
+  .top-header {
+    margin-bottom: 20px;
+  }
+
+  /* THE HIGHEST PRIORITY FIX FOR TICKET & RADAR */
+  div.ticket-main, .ticket-main {
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important;
+    padding: 15px !important;
+    align-items: center !important;
+    gap: 20px !important;
+  }
+  
+  div.ticket-info, .ticket-info {
+    border-right: none !important;
+    border-bottom: 2px dashed rgba(255,255,255,0.1) !important;
+    padding: 0 0 20px 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  div.ticket-qr-section, .ticket-qr-section {
+    width: 100% !important;
+    padding: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 10px !important;
+  }
+
+  /* Predictive Radar Fix */
+  .predictive-card header, .predictive-card > div[style*="flex"] {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    gap: 15px !important;
+  }
+
+  .routing-viz {
+    flex-direction: column !important;
+    gap: 30px !important;
+    align-items: center !important;
   }
 }
 
