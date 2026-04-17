@@ -13,8 +13,9 @@ VenueSync is a high-fidelity, premium administrative dashboard designed to trans
 - **Real-time Email Alerts:** Integrated with **EmailJS** to send formal "Login Successful" notifications directly to user inboxes upon authentication.
 - **Smart Profiles:** Automatically generated avatars and personalized dashboards based on registered user names.
 
-### 🤖 VenueAI PromptMaster (Hackathon Special)
+### 🤖 VenueAI PromptMaster & Prompt Engine (Hackathon Special)
 - **Conversational Context:** Integrated LLM-style overlay that reacts dynamically to natural language prompts (e.g., "Where's the empty washroom?").
+- **Vibe Coding Prompt Engine:** A dedicated "Prompt Engine" terminal tab where admins execute natural-language optimization system prompts (e.g., "Flash discount 20% to divert crowd") and watch a simulated live bash-style output.
 - **Live Sync Engine:** Prompt responses are securely tethered to live telemetry, making the AI explicitly aware of live 150+ facilities data.
 - **Micro-Interaction UI:** 'Typing' states, ping animations, and glow logic replicating a state-of-the-art GenAI conversational interface.
 

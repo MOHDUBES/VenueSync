@@ -4,7 +4,7 @@ import {
   Bell, Map, Clock, Coffee,
   Users, Activity, Navigation, ChevronRight,
   MonitorPlay, Maximize2, AlertCircle, Sparkles, TrendingUp, TrendingDown, LogOut,
-  Bot, MessageSquare, Send, X
+  Bot, MessageSquare, Send, X, Terminal, Code, Zap
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
@@ -443,6 +443,7 @@ function App() {
           <NavItem icon={<Map />} label="Live Map" active={activeTab === 'map'} onClick={() => setActiveTab('map')} />
           <NavItem icon={<Clock />} label="Smart Schedule" active={activeTab === 'schedule'} onClick={() => setActiveTab('schedule')} />
           <NavItem icon={<Users />} label="Crowd Radar" active={activeTab === 'radar'} onClick={() => setActiveTab('radar')} />
+          <NavItem icon={<Terminal />} label="Prompt Engine" active={activeTab === 'prompt'} onClick={() => setActiveTab('prompt')} />
         </div>
 
         <div className="user-profile" style={{ 
@@ -947,6 +948,11 @@ function App() {
               </div>
             </div>
           </motion.div>
+        )}
+
+        {/* Prompt Engine Content */}
+        {activeTab === 'prompt' && (
+          <PromptEngineView sendBroadcast={sendBroadcast} testData={{ facilities, crowdData }} />
         )}
 
         {/* Admin Layer Simulation */}
@@ -1467,6 +1473,107 @@ const SmartAssistAI = ({ show, onClose, contextData }) => {
         </motion.div>
       )}
     </AnimatePresence>
+  );
+};
+
+const PromptEngineView = ({ sendBroadcast, testData }) => {
+  const [prompt, setPrompt] = useState('Optimize stadium traffic for Interval rush.');
+  const [output, setOutput] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handleRun = () => {
+    if (!prompt) return;
+    setIsProcessing(true);
+    setOutput([]);
+    
+    const steps = [
+      `[Sys] Parsing intent: "${prompt}"...`,
+      `[AI] Analyzing current live telemetry metrics...`,
+      `[AI] Detected: Main Entry at ${testData.facilities[2].capacity}%, Washroom A at ${testData.facilities[1].capacity}%.`,
+      `[Action] Generating NLP-driven optimization pathways...`,
+      `[Output] Executing Smart Route Protocol #421 based on prompt mapping...`,
+      `SUCCESS: Venue balancing algorithm applied synthetically via Prompt Engine.`
+    ];
+    
+    steps.forEach((step, index) => {
+      setTimeout(() => {
+        setOutput(prev => [...prev, step]);
+        if (index === steps.length - 1) {
+          setIsProcessing(false);
+          sendBroadcast(`AI EXECUTED: ${prompt}`);
+        }
+      }, (index + 1) * 800);
+    });
+  };
+
+  return (
+    <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="prompt-engine-view card premium-glass" style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column' }}>
+      <div className="card-header" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '15px' }}>
+        <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}><Terminal color="var(--primary)" size={24} /> Venue Prompt Engine (Vibe Coding Mode)</h2>
+        <span className="live-tag" style={{ background: 'rgba(168,85,247,0.2)', color: '#d8b4fe', padding: '6px 12px', fontSize: '0.9rem', borderRadius: '20px' }}><Zap size={14} style={{ display: 'inline', marginBottom: '-2px' }} /> PromptWars Alpha API</span>
+      </div>
+      
+      <div style={{ display: 'flex', flex: 1, gap: '20px', marginTop: '20px', flexDirection: window.innerWidth < 768 ? 'column' : 'row' }}>
+        {/* Left: Input */}
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <label style={{ color: 'var(--text-dim)', fontSize: '0.95rem', fontWeight: 'bold', letterSpacing: '1px' }}>SYSTEM PROMPT INPUT</label>
+          <textarea 
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            style={{ 
+              flex: 1, background: 'rgba(0,0,0,0.5)', border: '1px solid rgba(99, 102, 241, 0.4)', borderRadius: '12px', 
+              padding: '20px', color: '#44ff44', fontFamily: 'monospace', fontSize: '1.05rem', resize: 'none', 
+              outline: 'none', boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5)' 
+            }}
+            placeholder="Type your venue management prompt here..."
+          />
+          <button onClick={handleRun} disabled={isProcessing} className="btn-primary" style={{ padding: '18px', fontSize: '1.1rem', background: isProcessing ? 'var(--glass-border)' : 'linear-gradient(135deg, var(--primary) 0%, #a855f7 100%)', cursor: isProcessing ? 'not-allowed' : 'pointer', fontWeight: 'bold', border: 'none', boxShadow: isProcessing ? 'none' : '0 10px 20px rgba(168, 85, 247, 0.3)' }}>
+            {isProcessing ? 'Processing AI Neural Models...' : 'Execute Prompt Workflow'}
+          </button>
+          
+          <div style={{ marginTop: 'auto', background: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
+            <h4 style={{ margin: '0 0 12px 0', color: 'var(--secondary)' }}>Suggested Prompt Engineering Hacks:</h4>
+            <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <span onClick={()=>setPrompt('Evacuate Food Court A due to suspected emergency and play alarm.')} style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.08)', padding: '8px 12px', borderRadius: '8px', fontSize: '0.85rem', border: '1px solid rgba(255,255,255,0.1)', transition: 'background 0.2s', ':hover': { background: 'rgba(255,255,255,0.2)'} }}>🚨 Emergency Evac</span>
+              <span onClick={()=>setPrompt('Flash discount 20% on all drinks in Snack Bar B to divert crowd from Main Entry.')} style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.08)', padding: '8px 12px', borderRadius: '8px', fontSize: '0.85rem', border: '1px solid rgba(255,255,255,0.1)' }}>💰 Divert via Discount</span>
+              <span onClick={()=>setPrompt('Re-allocate 5 cleaning staff to Washroom near Screen 1 immediately.')} style={{ cursor: 'pointer', background: 'rgba(255,255,255,0.08)', padding: '8px 12px', borderRadius: '8px', fontSize: '0.85rem', border: '1px solid rgba(255,255,255,0.1)' }}>🧹 Staff Re-allocate</span>
+            </div>
+          </div>
+        </div>
+        
+        {/* Right: Output terminal */}
+        <div style={{ flex: 1, background: '#09090b', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', padding: '20px', fontFamily: 'monospace', overflowY: 'auto', boxShadow: 'inset 0 0 30px rgba(0,0,0,0.8)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '15px' }}>
+            <Code size={18} color="var(--text-dim)" />
+            <span style={{ color: 'var(--text-dim)', fontSize: '0.9rem' }}>venue_ai_execution_runtime.sh</span>
+            <div style={{ marginLeft: 'auto', display: 'flex', gap: '6px' }}>
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ff5f56' }}></div>
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#ffbd2e' }}></div>
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#27c93f' }}></div>
+            </div>
+          </div>
+          <div style={{ color: '#a1a1aa', fontSize: '0.95rem', lineHeight: '1.7', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {output.map((line, idx) => (
+              <motion.div key={idx} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
+                 {line.startsWith('SUCCESS') ? <span style={{ color: '#22c55e', fontWeight: 'bold' }}>{line}</span> :
+                 line.startsWith('[Output]') ? <span style={{ color: '#a855f7', fontWeight: 'bold' }}>{line}</span> :
+                 line.startsWith('[Action]') ? <span style={{ color: 'var(--secondary)' }}>{line}</span> :
+                 line.startsWith('[Sys]') ? <span style={{ color: '#eab308' }}>{line}</span> :
+                 <span style={{ color: '#38bdf8' }}>{line}</span>}
+              </motion.div>
+            ))}
+            {isProcessing && (
+              <motion.div animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 1 }}>
+                <span style={{ color: 'var(--primary)', fontWeight: 'bold', fontSize: '1.2rem' }}>_</span>
+              </motion.div>
+            )}
+            {!isProcessing && output.length === 0 && (
+               <span style={{ color: 'rgba(255,255,255,0.2)', fontStyle: 'italic' }}>Terminal awaiting input...</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 };
 
