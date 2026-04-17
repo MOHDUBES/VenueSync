@@ -1,6 +1,6 @@
 # VenueSync: Intelligent Venue Management Portal
 
-### [🚀 Live Demo: VenueSync on Google Cloud Run](https://venuesync-280570791130.us-central1.run.app)
+### [🚀 Live Demo: VenueSync on GitHub Pages](https://MOHDUBES.github.io/VenueSync/)
 
 VenueSync is a high-fidelity, premium administrative dashboard designed to transform the way large-scale venues (stadiums, theaters, plazas) manage crowds, logistics, and safety in real-time. Built with a focus on rich aesthetics, predictive intelligence, and secure communication.
 
