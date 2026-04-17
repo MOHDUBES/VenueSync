@@ -13,6 +13,11 @@ VenueSync is a high-fidelity, premium administrative dashboard designed to trans
 - **Real-time Email Alerts:** Integrated with **EmailJS** to send formal "Login Successful" notifications directly to user inboxes upon authentication.
 - **Smart Profiles:** Automatically generated avatars and personalized dashboards based on registered user names.
 
+### 🤖 VenueAI PromptMaster (Hackathon Special)
+- **Conversational Context:** Integrated LLM-style overlay that reacts dynamically to natural language prompts (e.g., "Where's the empty washroom?").
+- **Live Sync Engine:** Prompt responses are securely tethered to live telemetry, making the AI explicitly aware of live 150+ facilities data.
+- **Micro-Interaction UI:** 'Typing' states, ping animations, and glow logic replicating a state-of-the-art GenAI conversational interface.
+
 ### Predictive Crowd Analytics
 - **Live Flow Visualization:** Real-time monitoring of Entry Rush, Washroom Queues, and Food Court wait times.
 - **AI CrowdBalanacing Engine:** Detects bottlenecks (e.g., "Main Entry at 85% capacity") and suggests/activates smart traffic routing to underutilized gates.

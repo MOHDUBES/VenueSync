@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Bell, Map, Clock, Coffee,
   Users, Activity, Navigation, ChevronRight,
-  MonitorPlay, Maximize2, AlertCircle, Sparkles, TrendingUp, TrendingDown, LogOut
+  MonitorPlay, Maximize2, AlertCircle, Sparkles, TrendingUp, TrendingDown, LogOut,
+  Bot, MessageSquare, Send, X
 } from 'lucide-react';
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
@@ -59,6 +60,7 @@ function App() {
   const [showEmailAlert, setShowEmailAlert] = useState(false);
   const [user, setUser] = useState({ name: 'Guest User', email: '' });
   const [loginForm, setLoginForm] = useState({ name: '', email: '', password: '' });
+  const [showAI, setShowAI] = useState(false);
 
   useEffect(() => {
     // Dynamically adding EmailJS script for REAL emails
@@ -1177,6 +1179,18 @@ function App() {
         {/* AR Navigation Viewfinder Overlay */}
         <ARSimulationOverlay show={showAR} onClose={() => setShowAR(false)} />
 
+        {/* Floating AI Agent Button */}
+        <button 
+          className="floating-ai-btn animate-pulse-slow"
+          onClick={() => setShowAI(!showAI)}
+          style={{ position: 'fixed', bottom: '30px', right: '30px', width: '60px', height: '60px', borderRadius: '50%', background: 'linear-gradient(135deg, var(--primary) 0%, #a855f7 100%)', border: 'none', boxShadow: '0 10px 30px rgba(168, 85, 247, 0.4)', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer', zIndex: 999 }}
+        >
+          <Bot size={30} />
+          {!showAI && <span style={{ position: 'absolute', top: 0, right: 0, background: '#ef4444', border: '2px solid #000', width: '15px', height: '15px', borderRadius: '50%' }}></span>}
+        </button>
+
+        <SmartAssistAI show={showAI} onClose={() => setShowAI(false)} contextData={{ facilities, movieTimeLeft }} />
+
       </main>
     </div>
   );
@@ -1343,6 +1357,112 @@ const ARSimulationOverlay = ({ show, onClose }) => {
                 </button>
               )}
             </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const SmartAssistAI = ({ show, onClose, contextData }) => {
+  const [messages, setMessages] = useState([
+    { sender: 'ai', text: 'Hi! I am VenueAI PromptMaster. Ask me about wait times, smart routing, or food pre-ordering!' }
+  ]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    
+    setMessages(prev => [...prev, { sender: 'user', text: input }]);
+    const query = input.toLowerCase();
+    setInput('');
+    setIsTyping(true);
+
+    setTimeout(() => {
+      let response = "I'm analyzing the real-time venue data... Could you specify if you need info on 'food', 'washroom', or 'movie schedule'?";
+      
+      if (query.includes('food') || query.includes('hungry') || query.includes('snack')) {
+         const snack = contextData.facilities.find(f => f.name.includes('Snack Bar B'));
+         response = `Currently, Main Entry Gate has a high wait time, but Snack Bar B has a low wait of ${snack ? snack.waitTime : '2'} mins. I suggest pre-ordering food right now to save time!`;
+      } else if (query.includes('washroom') || query.includes('bathroom') || query.includes('toilet') || query.includes('restroom')) {
+         const cr = contextData.facilities.find(f => f.type === 'washroom');
+         response = `The washroom near Screen 1 is currently ${cr ? cr.status : 'low'} crowded with a ${cr ? cr.waitTime : '1'} min wait. Best time to visit is now, before the Interstellar crowd arrives!`;
+      } else if (query.includes('movie') || query.includes('screen') || query.includes('interstellar') || query.includes('vip') || query.includes('ticket')) {
+         response = `Interstellar starts in ${contextData.movieTimeLeft} mins. The AR path to Screen 2 (VIP-A12) is clear through the main corridor. Avoid Section B!`;
+      } else if (query.includes('prompt') || query.includes('hackathon') || query.includes('promptwars') || query.includes('ai')) {
+         response = `Building for PromptWars? This AI integration boosts user experience by linking conversational prompts to live venue telemetry. Pure magic! ✨`;
+      }
+
+      setMessages(prev => [...prev, { sender: 'ai', text: response }]);
+      setIsTyping(false);
+    }, 1200);
+  };
+
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div 
+          className="ai-chat-window premium-glass"
+          initial={{ opacity: 0, y: 50, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 50, scale: 0.9 }}
+          style={{ position: 'fixed', bottom: '100px', right: '30px', width: '350px', height: '480px', borderRadius: '20px', display: 'flex', flexDirection: 'column', zIndex: 1000, overflow: 'hidden', border: '1px solid var(--primary)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}
+        >
+          <div className="ai-chat-header" style={{ padding: '15px 20px', background: 'linear-gradient(90deg, rgba(99,102,241,0.3) 0%, transparent 100%)', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ background: 'var(--primary)', padding: '8px', borderRadius: '50%' }}>
+                <Bot size={20} color="white" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ margin: 0, fontSize: '1.1rem', color: 'white' }}>VenueAI Agent</h3>
+                <span style={{ fontSize: '0.75rem', color: '#22c55e', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <div style={{ width: '6px', height: '6px', background: '#22c55e', borderRadius: '50%', boxShadow: '0 0 5px #22c55e' }}></div>
+                  Online & Syncing
+                </span>
+              </div>
+            </div>
+            <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}><X size={20}/></button>
+          </div>
+          
+          <div className="ai-chat-body" style={{ flex: 1, padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            {messages.map((m, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, x: m.sender === 'user' ? 20 : -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                style={{ alignSelf: m.sender === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}
+              >
+                <div style={{ padding: '12px 16px', borderRadius: '15px', background: m.sender === 'user' ? 'linear-gradient(135deg, var(--primary) 0%, #4f46e5 100%)' : 'rgba(255,255,255,0.05)', color: 'white', borderBottomRightRadius: m.sender === 'user' ? 0 : '15px', borderBottomLeftRadius: m.sender === 'ai' ? 0 : '15px', fontSize: '0.9rem', lineHeight: '1.4', border: m.sender === 'ai' ? '1px solid rgba(255,255,255,0.1)' : 'none' }}>
+                  {m.text}
+                </div>
+              </motion.div>
+            ))}
+            {isTyping && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ alignSelf: 'flex-start' }}>
+                 <div style={{ padding: '12px 16px', borderRadius: '15px', background: 'rgba(255,255,255,0.05)', borderBottomLeftRadius: 0, display: 'flex', gap: '5px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                   <motion.div animate={{ y: [0,-5,0] }} transition={{ repeat: Infinity, duration: 0.6 }} style={{width:'6px', height:'6px', background:'white', borderRadius:'50%'}}/>
+                   <motion.div animate={{ y: [0,-5,0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.2 }} style={{width:'6px', height:'6px', background:'white', borderRadius:'50%'}}/>
+                   <motion.div animate={{ y: [0,-5,0] }} transition={{ repeat: Infinity, duration: 0.6, delay: 0.4 }} style={{width:'6px', height:'6px', background:'white', borderRadius:'50%'}}/>
+                 </div>
+              </motion.div>
+            )}
+          </div>
+          
+          <div className="ai-chat-footer" style={{ padding: '15px', borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(0,0,0,0.3)' }}>
+            <form onSubmit={handleSend} style={{ display: 'flex', gap: '10px' }}>
+              <input 
+                type="text" 
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="Ask VenueAI..."
+                style={{ flex: 1, padding: '10px 15px', borderRadius: '20px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', outline: 'none', fontSize: '0.95rem' }}
+              />
+              <button type="submit" style={{ background: 'var(--primary)', border: 'none', width: '42px', height: '42px', borderRadius: '50%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'white', cursor: 'pointer', transition: 'transform 0.2s', transform: input.trim() ? 'scale(1.05)' : 'scale(1)' }}>
+                 <Send size={18} style={{ marginLeft: '-2px' }}/>
+              </button>
+            </form>
           </div>
         </motion.div>
       )}
