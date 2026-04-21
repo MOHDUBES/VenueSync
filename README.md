@@ -1,6 +1,6 @@
 # NutriSync AI: Smart Health & Nutrition Orchestrator
 
-### [🚀 Live Demo: NutriSync AI Portal](https://MOHDUBES.github.io/NutriSync-AI/)
+### [🚀 Live Demo: NutriSync AI Portal](https://MOHDUBES.github.io/VenueSync/)
 
 NutriSync AI is a state-of-the-art, **Gen-AI powered** health and nutrition platform built to address **UN Sustainable Development Goal 3 (Good Health and Well-being)**. By leveraging the power of Google's **Gemini 1.5 Pro**, NutriSync transforms natural language prompts into high-fidelity, personalized nutrition plans.
 
