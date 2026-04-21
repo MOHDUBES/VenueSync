@@ -1,66 +1,74 @@
-# NutriSync: Vibe-Coding AI Meal Planner
+# NutriSync AI: Smart Health & Nutrition Orchestrator
 
-### [🚀 Live Demo: NutriSync on GitHub Pages](https://MOHDUBES.github.io/VenueSync/)
+### [🚀 Live Demo: NutriSync AI Portal](https://MOHDUBES.github.io/NutriSync/)
 
-NutriSync is a high-fidelity, Gen-AI powered Meal Planner web application designed for the **PromptWars Hackathon**. Built with a focus on rich aesthetics, predictive macronutrient analytics, and a powerful vibe-coding LLM prompting interface.
-
----
-
-## 🤖 Core PromptWars AI Features
-
-### The Prompter Chef (Gemini-Powered Engine)
-- **Conversational Meal Prep:** Integrated LLM-style overlay that reacts dynamically to natural language prompts (e.g., "I have 3 eggs, spinach, and want a keto breakfast").
-- **Official Google Generative AI SDK:** Powered under the hood via `@google/generative-ai` configuration layout, ensuring standards compliance for AI evaluations.
-- **Micro-Interaction UI:** 'Typing' states, syntax highlighting, and live response generation replicating a state-of-the-art GenAI chat interface.
-
-### Predictive Nutrition Analytics
-- **Live Macro Tracking:** Real-time visualization of daily Calorie, Protein, Fat, and Carbs intake.
-- **Caloric Balancing Engine:** Interactive AreaCharts showing nutritional trends over a 7-day timeline.
-- **Smart Health Directives:** AI detects macro deficits ("You need 30g more protein") and suggests smart recipes automatically.
-
-### Smart Grocery Sync
-- **Automated List Integration:** Generates instant grocery shopping arrays based on requested LLM meal plans.
-- **Pantry Intelligence:** Remembers what ingredients you inputted in your prompts and excludes them from the shopping list.
+NutriSync AI is a state-of-the-art, **Gen-AI powered** health and nutrition platform built to address **UN Sustainable Development Goal 3 (Good Health and Well-being)**. By leveraging the power of Google's **Gemini 1.5 Pro**, NutriSync transforms natural language prompts into high-fidelity, personalized nutrition plans.
 
 ---
 
-## Technology Stack
-
-- **Frontend:** React (Vite)
-- **Styling:** Vanilla CSS (Deep Glassmorphic Premium Design System)
-- **Animations:** Framer Motion (fluid transitions and UI micro-interactions)
-- **AI Analytics Charts:** Recharts
-- **Icons:** Lucide React
-- **AI Core Integration:** Google Gemini SDK (`@google/generative-ai`)
+## 🌟 Solution Challenge 2026 Context
+Developed for the **Google Solution Challenge 2026**, NutriSync AI aims to democratize access to personalized nutrition advice. Using "Vibe-Coding" principles, it bridges the gap between complex nutritional data and user-friendly conversational AI.
 
 ---
 
-## Getting Started
+## 🤖 Core AI Features
+
+### 👨‍🍳 The AI Prompt Chef (Powered by Gemini)
+- **Semantic Understanding:** Input simple prompts like "I have 3 eggs and spinach, make it high protein" and get instant, calorie-counted recipes.
+- **Dynamic Orchestration:** Real-time generation of meal arrays based on pantry stock and dietary goals.
+- **Micro-Interaction UI:** Fluid 'typing' states and real-time response streams for a premium GenAI experience.
+
+### 📊 Predictive Macro Radar
+- **Caloric Analytics:** Recharts-powered visualization of nutritional trends over a 7-day period.
+- **Smart Insights:** AI automatically detects protein or fiber deficits and suggests actionable dietary fixes.
+- **Goal Balancing:** Interactive target setting for Weight Loss, Muscle Gain, or Athletic Maintenance.
+
+### 📧 Automated Health Sync
+- **EmailJS Integration:** Automated health reports and welcome alerts triggered via AI events.
+- **Pantry Intelligence:** Remembers previous prompt contexts to optimize grocery lists.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Frontend:** React.js (Vite)
+- **Styling:** Premium Glassmorphic Vanilla CSS
+- **Animations:** Framer Motion (Micro-interactions)
+- **AI Engine:** Google Generative AI SDK (`gemini-1.5-pro`)
+- **Visuals:** Recharts & Lucide React Icons
+
+---
+
+## 🚀 Getting Started
 
 1. **Clone the project:**
    ```bash
-   git clone https://github.com/MOHDUBES/VenueSync.git
+   git clone https://github.com/MOHDUBES/NutriSync.git
    ```
 
-2. **Install dependencies:**
+2. **Install Dependencies:**
    ```bash
    npm install
    ```
 
-3. **Provide Gemini Keys (Optional Local Dev):**
-   - Create a `.env` file
-   - Add `VITE_GEMINI_API_KEY=your_key`
+3. **Configure API Key:**
+   - Create a `.env` file.
+   - Add `VITE_GEMINI_API_KEY=your_google_ai_key`
 
-4. **Launch the Portal:**
+4. **Launch Application:**
    ```bash
    npm run dev
    ```
 
 ---
 
-## Design Philosophy
+## 🎨 Design Philosophy
+NutriSync follows a **high-fidelity dark aesthetic** to ensure accessibility and a premium software feel.
+- **Glassmorphism:** Deep layers and background blurs for a modern look.
+- **Neon Accents:** Emerald for health and Violet for AI intelligence.
+- **Mobile First:** Fully responsive across all devices.
 
-NutriSync follows a **High-Contrast Dark Aesthetic** with:
-- **Glassmorphism:** Deep transparency layers and blurred backdrops for a state-of-the-art feel.
-- **Neon Accents:** Primary emerald and secondary violet highlights representing health and AI intelligence.
-- **Responsive Layout:** Optimized for all displays.
+---
+
+### *Authored by MOHD UBES*
+Developed with ❤️ for the Google Developer Community.
